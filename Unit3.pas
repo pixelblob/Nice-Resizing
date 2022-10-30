@@ -1,0 +1,74 @@
+unit Unit3;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Math,
+  Dialogs, ExtCtrls, pngimage;
+
+type
+  TForm3 = class(TForm)
+    ScrollBox1: TScrollBox;
+    procedure FormActivate(Sender: TObject);
+    procedure FormResize(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form3: TForm3;
+  max, maxy: Integer;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm3.FormActivate(Sender: TObject);
+var
+  c: TImage;
+  I: Integer;
+begin
+
+end;
+
+procedure TForm3.FormResize(Sender: TObject);
+var
+  I, X, Y, paddingX, paddingY, oldMaxX, oldMaxY: Integer;
+  Item: TControl;
+  c: TImage;
+begin
+  for I := (ScrollBox1.ControlCount - 1) downto 0 do begin
+    Item := ScrollBox1.Controls[I];
+    Item.Free;
+  end;
+
+  max := Math.Floor(Form3.ClientWidth / 120);
+  maxy := Math.Floor(Form3.ClientHeight / 120);
+
+  if max = 0 then max := 1;
+
+  if maxy = 0 then maxy := 1;
+  
+
+  paddingX := Math.Floor((Form3.ClientWidth - max *105)/max);
+  paddingY := Math.Floor((Form3.ClientHeight - maxy *105)/maxy);
+
+  if ((oldMaxX <> max) or (oldMaxY <> maxy)) then begin
+
+    for Y := 0 to maxy - 1 do begin
+      for X := 0 to max - 1 do begin
+        c := TImage.Create(nil);
+        c.Picture.LoadFromFile('blank.png');
+        c.Parent := ScrollBox1;
+        c.Stretch := True;
+        c.Left := (X * 105) + (X * paddingX)+Math.Floor(paddingX/2);
+        c.Top := (Y * 105) + (Y * paddingY)+Math.Floor(paddingY/2);
+      end;
+    end;
+  end;
+
+end;
+
+end.
